@@ -127,57 +127,58 @@ async function readDocx(file) {
   if (typeof DecompressionStream === 'undefined') {
     throw new Error('Your browser cannot decompress DOCX files. Please save the script as a .txt file instead.');
   }
-  const buf  = await file.arrayBuffer();
-  const xml  = await extractZipEntry(new Uint8Array(buf), 'word/document.xml');
+  const buf = await file.arrayBuffer();
+  const xml = await extractZipEntry(new Uint8Array(buf), 'word/document.xml');
   return parseDocumentXml(xml);
 }
 
+// Read the ZIP central directory to jump directly to the target entry —
+// much faster than a byte-by-byte scan from the front.
 async function extractZipEntry(bytes, target) {
-  const SIG = [0x50, 0x4B, 0x03, 0x04];
-  let off = 0;
+  const u32 = (o) => (bytes[o] | bytes[o+1]<<8 | bytes[o+2]<<16 | bytes[o+3]<<24) >>> 0;
+  const u16 = (o) => bytes[o] | bytes[o+1]<<8;
 
-  while (off < bytes.length - 30) {
-    if (bytes[off] !== SIG[0] || bytes[off+1] !== SIG[1] ||
-        bytes[off+2] !== SIG[2] || bytes[off+3] !== SIG[3]) {
-      off++;
-      continue;
-    }
-    const method    = bytes[off+8]  | (bytes[off+9]  << 8);
-    const compSize  = bytes[off+18] | (bytes[off+19] << 8) | (bytes[off+20] << 16) | (bytes[off+21] << 24);
-    const nameLen   = bytes[off+26] | (bytes[off+27] << 8);
-    const extraLen  = bytes[off+28] | (bytes[off+29] << 8);
-    const name      = new TextDecoder().decode(bytes.subarray(off+30, off+30+nameLen));
-    const dataStart = off + 30 + nameLen + extraLen;
-    const data      = bytes.subarray(dataStart, dataStart + compSize);
+  // Locate End of Central Directory (EOCD) by scanning backwards
+  let eocd = -1;
+  for (let i = bytes.length - 22; i >= Math.max(0, bytes.length - 65558); i--) {
+    if (u32(i) === 0x06054b50) { eocd = i; break; }
+  }
+  if (eocd < 0) throw new Error('Not a valid ZIP / DOCX file.');
+
+  const cdCount  = u16(eocd + 10);
+  const cdOffset = u32(eocd + 16);
+
+  // Walk the central directory — O(entries), no scanning
+  let off = cdOffset;
+  for (let i = 0; i < cdCount; i++) {
+    if (u32(off) !== 0x02014b50) throw new Error('Corrupt ZIP central directory.');
+    const method      = u16(off + 10);
+    const compSize    = u32(off + 20);
+    const nameLen     = u16(off + 28);
+    const extraLen    = u16(off + 30);
+    const commentLen  = u16(off + 32);
+    const localOff    = u32(off + 42);
+    const name        = new TextDecoder().decode(bytes.subarray(off + 46, off + 46 + nameLen));
 
     if (name === target) {
+      const localExtraLen = u16(localOff + 28);
+      const dataStart     = localOff + 30 + nameLen + localExtraLen;
+      const data          = bytes.subarray(dataStart, dataStart + compSize);
       if (method === 0) return new TextDecoder().decode(data);
       if (method === 8) return new TextDecoder().decode(await inflateRaw(data));
-      throw new Error('Unsupported ZIP compression method ' + method);
+      throw new Error('Unsupported ZIP compression method: ' + method);
     }
-    off = dataStart + (compSize > 0 ? compSize : 1);
+    off += 46 + nameLen + extraLen + commentLen;
   }
-  throw new Error('Could not find ' + target + ' inside the DOCX file.');
+  throw new Error('word/document.xml not found — is this a valid DOCX file?');
 }
 
+// Stream the compressed bytes through DecompressionStream (faster than writer/reader loop)
 async function inflateRaw(compressed) {
-  const ds = new DecompressionStream('deflate-raw');
-  const writer = ds.writable.getWriter();
-  const reader = ds.readable.getReader();
-  await writer.write(compressed);
-  await writer.close();
-
-  const chunks = [];
-  for (;;) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    chunks.push(value);
-  }
-  const total = chunks.reduce((n, c) => n + c.length, 0);
-  const out = new Uint8Array(total);
-  let pos = 0;
-  for (const c of chunks) { out.set(c, pos); pos += c.length; }
-  return out;
+  const ds  = new DecompressionStream('deflate-raw');
+  const src = new Blob([compressed]).stream().pipeThrough(ds);
+  const buf = await new Response(src).arrayBuffer();
+  return new Uint8Array(buf);
 }
 
 function parseDocumentXml(xml) {
