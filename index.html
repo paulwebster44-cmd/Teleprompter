@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#0a0a14">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Teleprompter">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>Teleprompter</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- EDITOR VIEW -->
+  <div id="view-editor" class="view active">
+    <div class="editor-header">
+      <span class="logo">Teleprompter</span>
+    </div>
+    <div class="editor-body">
+
+      <!-- Import row -->
+      <div class="import-row">
+        <button id="btn-import-local" class="btn-import">&#128193; Import file</button>
+        <button id="btn-import-od"    class="btn-import btn-od">&#9729; OneDrive</button>
+      </div>
+      <input id="file-input" type="file" accept=".txt,.docx,.doc,.rtf" hidden>
+
+      <textarea id="script-input" spellcheck="false"
+        placeholder="Type your script here, or import a file above…"></textarea>
+
+      <div class="settings-card">
+        <div class="setting-row">
+          <label>Font size &nbsp;<strong id="lbl-font">48</strong> px</label>
+          <input id="sl-font" type="range" min="24" max="96" value="48">
+        </div>
+        <div class="setting-row">
+          <label>Scroll speed &nbsp;<strong id="lbl-speed">60</strong></label>
+          <input id="sl-speed" type="range" min="10" max="300" value="60">
+        </div>
+        <label class="toggle-row">
+          <input id="chk-camera" type="checkbox">
+          <span class="toggle-label">Record video while reading</span>
+        </label>
+      </div>
+
+      <button id="btn-start" class="btn-start">&#9654;&#xFE0E;&nbsp;&nbsp;Start</button>
+    </div>
+  </div>
+
+  <!-- PROMPTER VIEW -->
+  <div id="view-prompter" class="view">
+    <div id="scroll-wrap">
+      <div id="top-pad"></div>
+      <div id="script-display"></div>
+      <div id="bot-pad"></div>
+    </div>
+    <div id="guide-line"></div>
+
+    <div id="cam-pip" class="hidden">
+      <video id="cam-video" autoplay muted playsinline></video>
+      <div id="rec-dot">&#9679; REC</div>
+    </div>
+
+    <div id="ctrl-bar">
+      <button class="ctrl-btn" id="btn-exit" title="Exit">&#10005;</button>
+      <div id="prog-track"><div id="prog-fill"></div></div>
+      <button class="ctrl-btn speed-btn" id="btn-slower" title="Slower">&#8722;</button>
+      <button class="ctrl-btn play-btn"  id="btn-play"   title="Play / Pause">&#9654;&#xFE0E;</button>
+      <button class="ctrl-btn speed-btn" id="btn-faster" title="Faster">&#43;</button>
+      <button class="ctrl-btn rec-btn hidden" id="btn-rec" title="Record">&#9210;</button>
+    </div>
+
+    <div id="hint">Tap anywhere to start</div>
+  </div>
+
+  <!-- ONEDRIVE MODAL -->
+  <div id="od-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-head">
+        <span>Import from OneDrive</span>
+        <button id="od-close" class="modal-close">&#10005;</button>
+      </div>
+
+      <!-- Section 1: share link (no setup) -->
+      <div class="modal-section">
+        <p class="modal-label">PASTE A SHARE LINK &mdash; no account setup needed</p>
+        <ol class="modal-steps">
+          <li>In OneDrive, right-click your script file</li>
+          <li>Share &rarr; set to <em>Anyone with the link can view</em></li>
+          <li>Copy the link and paste it below</li>
+        </ol>
+        <input id="od-share-url" type="url" class="modal-input"
+               placeholder="https://1drv.ms/t/s!A… or https://onedrive.live.com/…">
+        <button id="od-import-link" class="modal-btn-primary">Import link</button>
+      </div>
+
+      <div class="modal-divider">&#8212; or browse your files &#8212;</div>
+
+      <!-- Section 2: picker (needs client ID) -->
+      <div class="modal-section">
+        <p class="modal-label">BROWSE FILES &mdash; one-time Azure setup</p>
+        <input id="od-client-id" type="text" class="modal-input"
+               placeholder="Paste your Azure App Client ID…">
+        <button id="od-browse" class="modal-btn-secondary">Browse OneDrive</button>
+
+        <details class="modal-details">
+          <summary>How to get a free Client ID (2 min)</summary>
+          <ol class="modal-steps">
+            <li>Sign in at <a href="https://portal.azure.com" target="_blank" rel="noopener">portal.azure.com</a> with your Microsoft account</li>
+            <li>Search <em>App registrations</em> &rarr; <strong>New registration</strong></li>
+            <li>Name: <em>Teleprompter</em> &nbsp;|&nbsp; Accounts: <em>Personal Microsoft accounts only</em></li>
+            <li>Redirect URI: <em>Single-page application (SPA)</em> &rarr; enter your app URL</li>
+            <li>Click <strong>Register</strong>, then copy the <strong>Application (client) ID</strong></li>
+          </ol>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING OVERLAY -->
+  <div id="loading-overlay" class="hidden">
+    <div class="spinner"></div>
+    <p id="loading-msg">Loading…</p>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

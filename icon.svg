@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#0a0a14"/>
+  <!-- Screen / monitor body -->
+  <rect x="72" y="120" width="368" height="236" rx="20" fill="#13131f" stroke="#56cef2" stroke-width="10"/>
+  <!-- Text lines on screen -->
+  <line x1="116" y1="188" x2="396" y2="188" stroke="#56cef2" stroke-width="14" stroke-linecap="round"/>
+  <line x1="116" y1="228" x2="396" y2="228" stroke="rgba(86,206,242,0.55)" stroke-width="14" stroke-linecap="round"/>
+  <line x1="116" y1="268" x2="396" y2="268" stroke="rgba(86,206,242,0.55)" stroke-width="14" stroke-linecap="round"/>
+  <line x1="116" y1="308" x2="280" y2="308" stroke="rgba(86,206,242,0.55)" stroke-width="14" stroke-linecap="round"/>
+  <!-- Stand neck -->
+  <rect x="240" y="356" width="32" height="52" rx="10" fill="#56cef2"/>
+  <!-- Stand base -->
+  <rect x="180" y="400" width="152" height="24" rx="12" fill="#56cef2"/>
+</svg>
