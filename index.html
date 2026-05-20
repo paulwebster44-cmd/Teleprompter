@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#0a0a14">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Teleprompter">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>Teleprompter</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- EDITOR VIEW -->
+  <div id="view-editor" class="view active">
+    <div class="editor-header">
+      <span class="logo">Teleprompter</span>
+    </div>
+    <div class="editor-body">
+      <textarea id="script-input" spellcheck="false"
+        placeholder="Paste or type your script here…"></textarea>
+
+      <div class="settings-card">
+        <div class="setting-row">
+          <label>Font size &nbsp;<strong id="lbl-font">48</strong> px</label>
+          <input id="sl-font" type="range" min="24" max="96" value="48">
+        </div>
+        <div class="setting-row">
+          <label>Scroll speed &nbsp;<strong id="lbl-speed">60</strong></label>
+          <input id="sl-speed" type="range" min="10" max="300" value="60">
+        </div>
+        <label class="toggle-row">
+          <input id="chk-camera" type="checkbox">
+          <span class="toggle-label">Record video while reading</span>
+        </label>
+      </div>
+
+      <button id="btn-start" class="btn-start">&#9654;&#xFE0E;&nbsp;&nbsp;Start</button>
+    </div>
+  </div>
+
+  <!-- PROMPTER VIEW -->
+  <div id="view-prompter" class="view">
+
+    <div id="scroll-wrap">
+      <div id="top-pad"></div>
+      <div id="script-display"></div>
+      <div id="bot-pad"></div>
+    </div>
+
+    <div id="guide-line"></div>
+
+    <!-- Camera PiP -->
+    <div id="cam-pip" class="hidden">
+      <video id="cam-video" autoplay muted playsinline></video>
+      <div id="rec-dot">&#9679; REC</div>
+    </div>
+
+    <!-- Control bar -->
+    <div id="ctrl-bar">
+      <button class="ctrl-btn" id="btn-exit" title="Exit">&#10005;</button>
+      <div id="prog-track"><div id="prog-fill"></div></div>
+      <button class="ctrl-btn speed-btn" id="btn-slower" title="Slower">&#8722;</button>
+      <button class="ctrl-btn play-btn" id="btn-play" title="Play / Pause">&#9654;&#xFE0E;</button>
+      <button class="ctrl-btn speed-btn" id="btn-faster" title="Faster">&#43;</button>
+      <button class="ctrl-btn rec-btn hidden" id="btn-rec" title="Record">&#9210;</button>
+    </div>
+
+    <div id="hint">Tap anywhere to start</div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
