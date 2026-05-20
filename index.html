@@ -21,11 +21,7 @@
     </div>
     <div class="editor-body">
 
-      <!-- Import row -->
-      <div class="import-row">
-        <button id="btn-import-local" class="btn-import">&#128193; Import file</button>
-        <button id="btn-import-od"    class="btn-import btn-od">&#9729; OneDrive</button>
-      </div>
+      <button id="btn-import-local" class="btn-import">&#128193;&nbsp; Import .txt or .docx file</button>
       <input id="file-input" type="file" accept=".txt,.docx,.doc,.rtf" hidden>
 
       <textarea id="script-input" spellcheck="false"
@@ -74,50 +70,6 @@
     </div>
 
     <div id="hint">Tap anywhere to start</div>
-  </div>
-
-  <!-- ONEDRIVE MODAL -->
-  <div id="od-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
-    <div class="modal-box">
-      <div class="modal-head">
-        <span>Import from OneDrive</span>
-        <button id="od-close" class="modal-close">&#10005;</button>
-      </div>
-
-      <!-- Section 1: share link (no setup) -->
-      <div class="modal-section">
-        <p class="modal-label">PASTE A SHARE LINK &mdash; no account setup needed</p>
-        <ol class="modal-steps">
-          <li>In OneDrive, right-click your script file</li>
-          <li>Share &rarr; set to <em>Anyone with the link can view</em></li>
-          <li>Copy the link and paste it below</li>
-        </ol>
-        <input id="od-share-url" type="url" class="modal-input"
-               placeholder="https://1drv.ms/t/s!A… or https://onedrive.live.com/…">
-        <button id="od-import-link" class="modal-btn-primary">Import link</button>
-      </div>
-
-      <div class="modal-divider">&#8212; or browse your files &#8212;</div>
-
-      <!-- Section 2: picker (needs client ID) -->
-      <div class="modal-section">
-        <p class="modal-label">BROWSE FILES &mdash; one-time Azure setup</p>
-        <input id="od-client-id" type="text" class="modal-input"
-               placeholder="Paste your Azure App Client ID…">
-        <button id="od-browse" class="modal-btn-secondary">Browse OneDrive</button>
-
-        <details class="modal-details">
-          <summary>How to get a free Client ID (2 min)</summary>
-          <ol class="modal-steps">
-            <li>Sign in at <a href="https://portal.azure.com" target="_blank" rel="noopener">portal.azure.com</a> with your Microsoft account</li>
-            <li>Search <em>App registrations</em> &rarr; <strong>New registration</strong></li>
-            <li>Name: <em>Teleprompter</em> &nbsp;|&nbsp; Accounts: <em>Personal Microsoft accounts only</em></li>
-            <li>Redirect URI: <em>Single-page application (SPA)</em> &rarr; enter your app URL</li>
-            <li>Click <strong>Register</strong>, then copy the <strong>Application (client) ID</strong></li>
-          </ol>
-        </details>
-      </div>
-    </div>
   </div>
 
   <!-- LOADING OVERLAY -->
