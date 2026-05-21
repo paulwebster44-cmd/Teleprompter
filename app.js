@@ -103,7 +103,7 @@ fileInput.addEventListener('change', async () => {
   }
 });
 
-// ── DOCX extractor (no external library) ───────────────
+// ── DOCX extractor (no external library) ─────────────────
 async function readDocx(file) {
   if (typeof DecompressionStream === 'undefined') {
     throw new Error('Your browser cannot decompress DOCX files. Please save your script as a .txt file instead.');
@@ -208,7 +208,7 @@ btnStart.addEventListener('click', async () => {
 async function startCamera() {
   try {
     S.stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+      video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 }, aspectRatio: { ideal: 16/9 } },
       audio: true,
     });
     camVideo.srcObject = S.stream;
