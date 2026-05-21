@@ -4,7 +4,7 @@
   "description": "Mobile teleprompter with auto-scroll and video recording",
   "start_url": "./index.html",
   "display": "fullscreen",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#0a0a14",
   "theme_color": "#0a0a14",
   "icons": [
