@@ -206,17 +206,28 @@ btnStart.addEventListener('click', async () => {
 
 // ── Camera ───────────────────────────────────────────────
 async function startCamera() {
-  try {
-    S.stream = await navigator.mediaDevices.getUserMedia({
-  video: { facingMode: 'user', width: { min: 1280, ideal: 1920 }, height: { min: 720, ideal: 1080 }, aspectRatio: { ideal: 1.7778 } },
-  audio: true,
-});
-    camVideo.srcObject = S.stream;
-    makePipDraggable(camPip);
-    return true;
-  } catch (e) {
-    alert('Camera unavailable: ' + (e.message || e));
-    return false;
+  // Try progressively relaxed constraints until one works
+  const attempts = [
+    { facingMode: 'user', width: { min: 1280, ideal: 1920 }, height: { min: 720, ideal: 1080 }, aspectRatio: { ideal: 1.7778 } },
+    { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 }, aspectRatio: { ideal: 1.7778 } },
+    { facingMode: 'user' },
+  ];
+
+  for (let i = 0; i < attempts.length; i++) {
+    try {
+      S.stream = await navigator.mediaDevices.getUserMedia({ video: attempts[i], audio: true });
+      const settings = S.stream.getVideoTracks()[0]?.getSettings() || {};
+      console.log(`Camera started: ${settings.width}x${settings.height}`);
+      camVideo.srcObject = S.stream;
+      makePipDraggable(camPip);
+      return true;
+    } catch (e) {
+      if (i === attempts.length - 1) {
+        alert('Camera unavailable: ' + (e.message || e));
+        return false;
+      }
+      // Try next set of constraints
+    }
   }
 }
 
