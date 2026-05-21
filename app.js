@@ -208,9 +208,9 @@ btnStart.addEventListener('click', async () => {
 async function startCamera() {
   try {
     S.stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 }, aspectRatio: { ideal: 16/9 } },
-      audio: true,
-    });
+  video: { facingMode: 'user', width: { min: 1280, ideal: 1920 }, height: { min: 720, ideal: 1080 }, aspectRatio: { ideal: 1.7778 } },
+  audio: true,
+});
     camVideo.srcObject = S.stream;
     makePipDraggable(camPip);
     return true;
