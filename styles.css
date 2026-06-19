@@ -39,22 +39,18 @@ html, body {
   display: flex; flex-direction: column; gap: 14px;
 }
 
-/* Import row */
-.import-row {
-  display: flex; gap: 10px;
-}
+/* Import button */
 .btn-import {
-  flex: 1;
+  width: 100%;
   background: var(--surface);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 10px;
-  padding: 12px 8px;
-  font-size: 14px; font-weight: 600;
+  padding: 13px;
+  font-size: 15px; font-weight: 600;
   cursor: pointer; text-align: center;
 }
 .btn-import:active { opacity: .7; }
-.btn-od { border-color: #0078d4; color: #5ab3ff; }
 
 /* Textarea */
 #script-input {
@@ -185,98 +181,6 @@ html, body {
   color: rgba(255,255,255,.35); font-size: 17px;
   pointer-events: none; transition: opacity .5s ease; z-index: 15;
 }
-
-/* ════════ ONEDRIVE MODAL ════════ */
-.modal-backdrop {
-  position: fixed; inset: 0; z-index: 100;
-  background: rgba(0,0,0,.75);
-  display: flex; align-items: flex-end;
-  padding: 0;
-}
-.modal-backdrop.hidden { display: none !important; }
-
-.modal-box {
-  width: 100%; max-height: 92vh;
-  background: var(--surface);
-  border-radius: 20px 20px 0 0;
-  border-top: 1px solid var(--border);
-  overflow-y: auto;
-  padding-bottom: env(safe-area-inset-bottom, 16px);
-}
-
-.modal-head {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 18px 20px 14px;
-  font-size: 16px; font-weight: 700; color: var(--text);
-  border-bottom: 1px solid var(--border);
-  position: sticky; top: 0;
-  background: var(--surface);
-}
-.modal-close {
-  background: none; border: none; color: var(--muted);
-  font-size: 18px; cursor: pointer; padding: 4px 8px;
-}
-
-.modal-section { padding: 18px 20px; }
-
-.modal-label {
-  font-size: 11px; font-weight: 700; letter-spacing: .8px;
-  color: var(--muted); margin-bottom: 10px;
-}
-
-.modal-steps {
-  font-size: 13px; color: var(--muted);
-  padding-left: 18px; margin-bottom: 14px;
-  line-height: 1.7;
-}
-.modal-steps li { margin-bottom: 2px; }
-.modal-steps em { color: var(--text); font-style: normal; }
-.modal-steps strong { color: var(--accent); }
-.modal-steps a { color: var(--accent); }
-
-.modal-input {
-  width: 100%; padding: 12px 14px;
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 10px; color: var(--text); font-size: 14px;
-  outline: none; margin-bottom: 12px;
-}
-.modal-input:focus { border-color: var(--accent); }
-.modal-input::placeholder { color: var(--muted); }
-
-.modal-btn-primary {
-  width: 100%; padding: 14px;
-  background: var(--accent); color: #000;
-  border: none; border-radius: 10px;
-  font-size: 15px; font-weight: 700; cursor: pointer;
-}
-.modal-btn-primary:active { opacity: .8; }
-
-.modal-btn-secondary {
-  width: 100%; padding: 14px;
-  background: #0078d4; color: #fff;
-  border: none; border-radius: 10px;
-  font-size: 15px; font-weight: 700; cursor: pointer;
-  margin-bottom: 14px;
-}
-.modal-btn-secondary:active { opacity: .8; }
-.modal-btn-secondary:disabled { opacity: .4; cursor: not-allowed; }
-
-.modal-divider {
-  text-align: center; font-size: 12px; color: var(--muted);
-  padding: 0 20px; border-top: 1px solid var(--border);
-  padding-top: 14px; margin: 0 20px;
-}
-
-.modal-details {
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 10px; padding: 12px 14px;
-}
-.modal-details summary {
-  font-size: 13px; color: var(--accent); cursor: pointer; list-style: none;
-}
-.modal-details summary::before { content: '▶ '; font-size: 10px; }
-.modal-details[open] summary::before { content: '▼ '; }
-.modal-details .modal-steps { margin-top: 10px; margin-bottom: 0; }
 
 /* ════════ LOADING OVERLAY ════════ */
 #loading-overlay {
